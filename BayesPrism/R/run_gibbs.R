@@ -206,7 +206,6 @@ estimate.gibbs.time <- function(gibbsSampler.obj,
 				     			list(chain.length = chain.length, 
 				     				 burn.in = chain.length*gibbs.control$burn.in/gibbs.control$chain.length,
 				     				 thinning = gibbs.control$thinning)
-				     		 	)
 				    			)	
 		}	
 	}
@@ -259,7 +258,7 @@ run.gibbs.refPhi <- function(gibbsSampler.obj,
 			cpu.fun <- function(n) {
 				if(!is.null(seed)) set.seed(seed)
 				require("BayesPrism")
-				sample.Z.theta_n (X_n = X[n,], phi = phi, alpha = alpha, gibbs.idx = gibbs.idx, compute.elbo = compute.elbo)
+				BayesPrism:::sample.Z.theta_n (X_n = X[n,], phi = phi, alpha = alpha, gibbs.idx = gibbs.idx, compute.elbo = compute.elbo)
 			}
 			environment(cpu.fun) <- globalenv()
 			gibbs.list <- sfLapply( 1:nrow(X), cpu.fun)
@@ -275,7 +274,7 @@ run.gibbs.refPhi <- function(gibbsSampler.obj,
 			cpu.fun <- function(n) {
 				if(!is.null(seed)) set.seed(seed)
 				require("BayesPrism")
-				sample.theta_n (X_n = X[n,], phi = phi, alpha = alpha, gibbs.idx = gibbs.idx)
+				BayesPrism:::sample.theta_n (X_n = X[n,], phi = phi, alpha = alpha, gibbs.idx = gibbs.idx)
 			}
 			environment(cpu.fun) <- globalenv()
 			gibbs.list <- sfLapply( 1:nrow(X), cpu.fun)
@@ -293,7 +292,7 @@ run.gibbs.refPhi <- function(gibbsSampler.obj,
 			cpu.fun <- function(n) {
 				if(!is.null(seed)) set.seed(seed)
 				cat(n," ")
-				sample.Z.theta_n (X_n = X[n,], phi = phi, alpha = alpha, gibbs.idx = gibbs.idx, compute.elbo = compute.elbo)
+				BayesPrism:::sample.Z.theta_n (X_n = X[n,], phi = phi, alpha = alpha, gibbs.idx = gibbs.idx, compute.elbo = compute.elbo)
 			}
 			gibbs.list <- lapply( 1:nrow(X), cpu.fun)
 			cat("\n")
@@ -307,7 +306,7 @@ run.gibbs.refPhi <- function(gibbsSampler.obj,
 			cpu.fun <- function(n) {
 				if(!is.null(seed)) set.seed(seed)
 				cat(n," ")
-				sample.theta_n (X_n = X[n,], phi = phi, alpha = alpha, gibbs.idx = gibbs.idx)
+				BayesPrism:::sample.theta_n (X_n = X[n,], phi = phi, alpha = alpha, gibbs.idx = gibbs.idx)
 			}
 			gibbs.list <- lapply( 1:nrow(X), cpu.fun)
 			cat("\n")
@@ -344,7 +343,7 @@ run.gibbs.refTumor <- function(gibbsSampler.obj){
 	cpu.fun <- function(n) {
 		if(!is.null(seed)) set.seed(seed)
 		require("BayesPrism")
-		sample.theta_n (X_n = X[n,], 
+		BayesPrism:::sample.theta_n (X_n = X[n,], 
 						phi = rbind(psi_mal[n,], psi_env), 
 						alpha = alpha,
 						gibbs.idx = gibbs.idx)				    				
