@@ -206,7 +206,8 @@ estimate.gibbs.time <- function(gibbsSampler.obj,
 				     			list(chain.length = chain.length, 
 				     				 burn.in = chain.length*gibbs.control$burn.in/gibbs.control$chain.length,
 				     				 thinning = gibbs.control$thinning)
-				    			)	
+				    			)
+					)
 		}	
 	}
 	
