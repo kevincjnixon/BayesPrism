@@ -29,6 +29,7 @@ rdirichlet <- function(alpha){
 #' @param alpha a numeric value to denote the symmetric Dirichlet prior 
 #' @param gibbs.idx a numeric vector to denote the index of samples to be retained from MCMC chain
 #' @param compute.elbo a logical variable to denote if compute ELBO. Default=FALSE.
+#' @export
 #' return a list containing the posterior mean of Z_n and theta_n
 sample.Z.theta_n <- function(X_n, 
 				        	 	 phi,
@@ -101,6 +102,7 @@ sample.Z.theta_n <- function(X_n,
 #' @param phi an array of dimension K*G to denote reference matrix of Nth sample
 #' @param alpha a numeric value to denote the symmetric Dirichlet prior 
 #' @param gibbs.idx a numeric vector to denote the index of samples to be retained from MCMC chain 
+#' @export
 #' return a vector containing the posterior mean of theta_n
 sample.theta_n <- function(X_n, 
 				           phi,
