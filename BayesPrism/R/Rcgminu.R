@@ -1,3 +1,4 @@
+#' @export
 Rcgminu <- function(par, fn, gr, control = list(), ...) {
     ## An R version of the conjugate gradient minimization
     ## using the Dai-Yuan ideas
