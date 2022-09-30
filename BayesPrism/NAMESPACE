@@ -15,6 +15,9 @@ export(compute.elbo)
 export(log.mle.gamma, log.mle.gamma.grad)
 export(log.posterior.gamma, log.posterior.gamma.grad)
 
+export(sample.Z.theta_n)
+export(sample.theta_n)
+
 export(plot.cor.phi)
 export(plot.scRNA.outlier, plot.bulk.outlier, plot.bulk.vs.sc)
 export(select.gene.type, cleanup.genes)
