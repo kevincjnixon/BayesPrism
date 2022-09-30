@@ -261,7 +261,7 @@ run.gibbs.refPhi <- function(gibbsSampler.obj,
 			cpu.fun <- function(n) {
 				if(!is.null(seed)) set.seed(seed)
 				require("BayesPrism")
-				BayesPrism:::sample.Z.theta_n (X_n = X[n,], phi = phi, alpha = alpha, gibbs.idx = gibbs.idx, compute.elbo = compute.elbo)
+				sample.Z.theta_n (X_n = X[n,], phi = phi, alpha = alpha, gibbs.idx = gibbs.idx, compute.elbo = compute.elbo)
 			}
 			environment(cpu.fun) <- globalenv()
 			gibbs.list <- sfLapply( 1:nrow(X), cpu.fun)
@@ -277,7 +277,7 @@ run.gibbs.refPhi <- function(gibbsSampler.obj,
 			cpu.fun <- function(n) {
 				if(!is.null(seed)) set.seed(seed)
 				require("BayesPrism")
-				BayesPrism:::sample.theta_n (X_n = X[n,], phi = phi, alpha = alpha, gibbs.idx = gibbs.idx)
+				sample.theta_n (X_n = X[n,], phi = phi, alpha = alpha, gibbs.idx = gibbs.idx)
 			}
 			environment(cpu.fun) <- globalenv()
 			gibbs.list <- sfLapply( 1:nrow(X), cpu.fun)
@@ -294,8 +294,9 @@ run.gibbs.refPhi <- function(gibbsSampler.obj,
 		if(!final){
 			cpu.fun <- function(n) {
 				if(!is.null(seed)) set.seed(seed)
+				require("BayesPrism")
 				cat(n," ")
-				BayesPrism:::sample.Z.theta_n (X_n = X[n,], phi = phi, alpha = alpha, gibbs.idx = gibbs.idx, compute.elbo = compute.elbo)
+				sample.Z.theta_n (X_n = X[n,], phi = phi, alpha = alpha, gibbs.idx = gibbs.idx, compute.elbo = compute.elbo)
 			}
 			gibbs.list <- lapply( 1:nrow(X), cpu.fun)
 			cat("\n")
@@ -308,8 +309,9 @@ run.gibbs.refPhi <- function(gibbsSampler.obj,
 		else{
 			cpu.fun <- function(n) {
 				if(!is.null(seed)) set.seed(seed)
+				require("BayesPrism")
 				cat(n," ")
-				BayesPrism:::sample.theta_n (X_n = X[n,], phi = phi, alpha = alpha, gibbs.idx = gibbs.idx)
+				sample.theta_n (X_n = X[n,], phi = phi, alpha = alpha, gibbs.idx = gibbs.idx)
 			}
 			gibbs.list <- lapply( 1:nrow(X), cpu.fun)
 			cat("\n")
@@ -346,7 +348,7 @@ run.gibbs.refTumor <- function(gibbsSampler.obj){
 	cpu.fun <- function(n) {
 		if(!is.null(seed)) set.seed(seed)
 		require("BayesPrism")
-		BayesPrism:::sample.theta_n (X_n = X[n,], 
+		sample.theta_n (X_n = X[n,], 
 						phi = rbind(psi_mal[n,], psi_env), 
 						alpha = alpha,
 						gibbs.idx = gibbs.idx)				    				
