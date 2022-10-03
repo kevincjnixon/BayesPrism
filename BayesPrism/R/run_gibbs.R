@@ -286,7 +286,8 @@ run.gibbs.refPhi <- function(gibbsSampler.obj,
 		sfInit(parallel = TRUE, cpus = gibbs.control$n.cores, type = "SOCK" )
 		environment(sample.Z.theta_n)<-globalenv()
 		environment(sample.theta_n)<-globalenv()
-		sfExport("phi", "X", "alpha", "gibbs.idx", "seed", "compute.elbo", "sample.Z.theta_n","sample.theta_n")
+		environment(rdirichlet)<-globalenv()
+		sfExport("phi", "X", "alpha", "gibbs.idx", "seed", "compute.elbo", "sample.Z.theta_n","sample.theta_n","rdirichlet")
 		if(!final){
 			cpu.fun <- function(n) {
 				if(!is.null(seed)) set.seed(seed)
