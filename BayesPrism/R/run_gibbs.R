@@ -285,7 +285,7 @@ run.gibbs.refPhi <- function(gibbsSampler.obj,
 		#parallel using snowfall	
 		sfInit(parallel = TRUE, cpus = gibbs.control$n.cores, type = "SOCK" )
 		sfExport("phi", "X", "alpha", "gibbs.idx", "seed", "compute.elbo")
-		sfLibrary("BayesPrism")
+		sfLibrary(BayesPrism)
 		if(!final){
 			#cpu.fun <- function(n) {
 			#	if(!is.null(seed)) set.seed(seed)
