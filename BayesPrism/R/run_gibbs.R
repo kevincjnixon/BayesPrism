@@ -284,16 +284,15 @@ run.gibbs.refPhi <- function(gibbsSampler.obj,
 	if(gibbs.control$n.cores>1){	
 		#parallel using snowfall	
 		sfInit(parallel = TRUE, cpus = gibbs.control$n.cores, type = "SOCK" )
-		sfExport("phi", "X", "alpha", "gibbs.idx", "seed", "compute.elbo")
-		sfLibrary(BayesPrism)
+		sfExport("phi", "X", "alpha", "gibbs.idx", "seed", "compute.elbo", "sample.Z.theta_n","sample.theta_n")
 		if(!final){
-			#cpu.fun <- function(n) {
-			#	if(!is.null(seed)) set.seed(seed)
-			#	require("BayesPrism")
-			#	sample.Z.theta_n (X_n = X[n,], phi = phi, alpha = alpha, gibbs.idx = gibbs.idx, compute.elbo = compute.elbo)
-			#}
-			#environment(cpu.fun) <- globalenv()
-			gibbs.list <- sfLapply( 1:nrow(X), cpu.fun.1)
+			cpu.fun <- function(n) {
+				if(!is.null(seed)) set.seed(seed)
+				require("BayesPrism")
+				sample.Z.theta_n (X_n = X[n,], phi = phi, alpha = alpha, gibbs.idx = gibbs.idx, compute.elbo = compute.elbo)
+			}
+			environment(cpu.fun) <- globalenv()
+			gibbs.list <- sfLapply( 1:nrow(X), cpu.fun)
 			sfStop()
 		
 			jointPost <- newJointPost(bulkID = rownames(X),
