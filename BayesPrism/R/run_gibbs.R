@@ -288,7 +288,7 @@ run.gibbs.refPhi <- function(gibbsSampler.obj,
 		}
 	}
 	else{
-		single thread
+		#single thread
 		if(!final){
 			cpu.fun <- function(n) {
 				if(!is.null(seed)) set.seed(seed)
