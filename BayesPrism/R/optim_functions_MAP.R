@@ -73,25 +73,26 @@ optimize.psi<-function(phi,
 					   		
 	Z_t <- colSums(Z_gt)
 				  			
-	#cpu.fun <- function(t) {
-	#	require(BayesPrism)
-	#	Rcgminu(par= rep(0,ncol(phi)),
-	 # 			fn= log.posterior.gamma,
-	  #			gr= log.posterior.gamma.grad,
-	  #			control= opt.control, 
-	  #			phi_t = phi[t,],
-	  #			phi_t.log = log(phi[t,]),
-	  #			Z_gt.t = Z_gt[,t], 
-	  #			Z_t.t = Z_t[t],
-	  #			prior.num = prior.num)
-	#}
+	cpu.fun <- function(t) {
+		require(BayesPrism)
+		Rcgminu(par= rep(0,ncol(phi)),
+	 			fn= log.posterior.gamma,
+	 			gr= log.posterior.gamma.grad,
+	 			control= opt.control, 
+	  			phi_t = phi[t,],
+	  			phi_t.log = log(phi[t,]),
+	  			Z_gt.t = Z_gt[,t], 
+	  			Z_t.t = Z_t[t],
+	  			prior.num = prior.num)
+	}
 	
 	sfInit(parallel = TRUE, cpus = opt.control$n.cores, type = "SOCK" )
 	opt.control$n.cores <- NULL
-	sfExport("phi", "Z_gt", "Z_t", "prior.num", "opt.control")
+	environment(Rcgminu)<-globalenv()
+	sfExport("phi", "Z_gt", "Z_t", "prior.num", "opt.control", "Rcgminu")
 
 	#environment(cpu.fun) <- globalenv()
-	opt.res <- sfLapply( 1:nrow(phi), cpu.fun.6)
+	opt.res <- sfLapply( 1:nrow(phi), cpu.fun)
 	sfStop()
 	gc()
 	
