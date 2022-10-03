@@ -254,7 +254,8 @@ run.gibbs.refPhi <- function(gibbsSampler.obj,
 		environment(sample.Z.theta_n)<-globalenv()
 		environment(sample.theta_n)<-globalenv()
 		environment(rdirichlet)<-globalenv()
-		sfExport("phi", "X", "alpha", "gibbs.idx", "seed", "compute.elbo", "sample.Z.theta_n","sample.theta_n","rdirichlet")
+		environment(Rcgminu)<-globalenv()
+		sfExport("phi", "X", "alpha", "gibbs.idx", "seed", "compute.elbo", "sample.Z.theta_n","sample.theta_n","rdirichlet", "Rcgminu")
 		if(!final){
 			cpu.fun <- function(n) {
 				if(!is.null(seed)) set.seed(seed)
@@ -356,7 +357,8 @@ run.gibbs.refTumor <- function(gibbsSampler.obj){
 	environment(sample.theta_n)<-globalenv()
 	environment(sample.Z.theta_n)<-globalenv()
 	environment(rdirichlet)<-globalenv()
-	sfExport("psi_mal", "psi_env", "X", "alpha", "gibbs.idx", "seed", "sample.theta_n","sample.Z.theta_n","rdirichlet")
+	environment(Rcgminu)<-globalenv()
+	sfExport("psi_mal", "psi_env", "X", "alpha", "gibbs.idx", "seed", "sample.theta_n","sample.Z.theta_n","rdirichlet", "Rcgminu")
 
 	environment(cpu.fun) <- globalenv()
 	gibbs.list <- sfLapply( 1:nrow(X), cpu.fun)
