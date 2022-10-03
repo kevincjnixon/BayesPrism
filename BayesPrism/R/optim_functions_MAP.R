@@ -45,19 +45,6 @@ log.posterior.gamma.grad <- function (gamma_t,
 }
 
 
-#' cpu.fun.6
-cpu.fun.6 <- function(t) {
-		require(BayesPrism)
-		Rcgminu(par= rep(0,ncol(phi)),
-	  			fn= log.posterior.gamma,
-	  			gr= log.posterior.gamma.grad,
-	  			control= opt.control, 
-	  			phi_t = phi[t,],
-	  			phi_t.log = log(phi[t,]),
-	  			Z_gt.t = Z_gt[,t], 
-	  			Z_t.t = Z_t[t],
-	  			prior.num = prior.num)
-	}
 
 #' function to optimize over gamma
 optimize.psi<-function(phi,
