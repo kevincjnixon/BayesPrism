@@ -76,7 +76,10 @@ optimize.psi<-function(phi,
 	sfInit(parallel = TRUE, cpus = opt.control$n.cores, type = "SOCK" )
 	opt.control$n.cores <- NULL
 	environment(Rcgminu)<-globalenv()
-	sfExport("phi", "Z_gt", "Z_t", "prior.num", "opt.control", "Rcgminu")
+	environment(log.posterior.gamma.grad)<-globalenv()
+	environment(log.posterior.gamma)<-globalenv()
+	environment(logsumexp)<-globalenv()
+	sfExport("phi", "Z_gt", "Z_t", "prior.num", "opt.control", "Rcgminu", "log.posterior.gamma.grad","log.posterior.gamma","logsumexp")
 
 	#environment(cpu.fun) <- globalenv()
 	opt.res <- sfLapply( 1:nrow(phi), cpu.fun)
