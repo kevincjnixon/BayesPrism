@@ -227,7 +227,36 @@ estimate.gibbs.time <- function(gibbsSampler.obj,
 }
 
 
+#' cpu.fun.1
+cpu.fun.1 <- function(n) {
+				if(!is.null(seed)) set.seed(seed)
+				require("BayesPrism")
+				sample.Z.theta_n (X_n = X[n,], phi = phi, alpha = alpha, gibbs.idx = gibbs.idx, compute.elbo = compute.elbo)
+			}
 
+#' cpu.fun.2
+cpu.fun.2 <- function(n) {
+				if(!is.null(seed)) set.seed(seed)
+				require("BayesPrism")
+				sample.theta_n (X_n = X[n,], phi = phi, alpha = alpha, gibbs.idx = gibbs.idx)
+			}
+
+#' cpu.fun.3
+cpu.fun.3 <- function(n) {
+				if(!is.null(seed)) set.seed(seed)
+				require("BayesPrism")
+				cat(n," ")
+				sample.Z.theta_n (X_n = X[n,], phi = phi, alpha = alpha, gibbs.idx = gibbs.idx, compute.elbo = compute.elbo)
+			}
+
+#' cpu.fun.4
+
+cpu.fun.4 <- function(n) {
+				if(!is.null(seed)) set.seed(seed)
+				require("BayesPrism")
+				cat(n," ")
+				sample.theta_n (X_n = X[n,], phi = phi, alpha = alpha, gibbs.idx = gibbs.idx)
+			}
 
 
 
@@ -258,13 +287,13 @@ run.gibbs.refPhi <- function(gibbsSampler.obj,
 		sfExport("phi", "X", "alpha", "gibbs.idx", "seed", "compute.elbo")
 
 		if(!final){
-			cpu.fun <- function(n) {
-				if(!is.null(seed)) set.seed(seed)
-				require("BayesPrism")
-				sample.Z.theta_n (X_n = X[n,], phi = phi, alpha = alpha, gibbs.idx = gibbs.idx, compute.elbo = compute.elbo)
-			}
-			environment(cpu.fun) <- globalenv()
-			gibbs.list <- sfLapply( 1:nrow(X), cpu.fun)
+			#cpu.fun <- function(n) {
+			#	if(!is.null(seed)) set.seed(seed)
+			#	require("BayesPrism")
+			#	sample.Z.theta_n (X_n = X[n,], phi = phi, alpha = alpha, gibbs.idx = gibbs.idx, compute.elbo = compute.elbo)
+			#}
+			#environment(cpu.fun) <- globalenv()
+			gibbs.list <- sfLapply( 1:nrow(X), cpu.fun.1)
 			sfStop()
 		
 			jointPost <- newJointPost(bulkID = rownames(X),
@@ -274,13 +303,13 @@ run.gibbs.refPhi <- function(gibbsSampler.obj,
 			return(jointPost)
 		}
 		else{
-			cpu.fun <- function(n) {
-				if(!is.null(seed)) set.seed(seed)
-				require("BayesPrism")
-				sample.theta_n (X_n = X[n,], phi = phi, alpha = alpha, gibbs.idx = gibbs.idx)
-			}
+			#cpu.fun <- function(n) {
+			#	if(!is.null(seed)) set.seed(seed)
+			#	require("BayesPrism")
+			#	sample.theta_n (X_n = X[n,], phi = phi, alpha = alpha, gibbs.idx = gibbs.idx)
+			#}
 			environment(cpu.fun) <- globalenv()
-			gibbs.list <- sfLapply( 1:nrow(X), cpu.fun)
+			gibbs.list <- sfLapply( 1:nrow(X), cpu.fun.2)
 			sfStop()
 		
 			thetaPost <- newThetaPost (bulkID = rownames(X),
@@ -292,13 +321,13 @@ run.gibbs.refPhi <- function(gibbsSampler.obj,
 	else{
 		#single thread
 		if(!final){
-			cpu.fun <- function(n) {
-				if(!is.null(seed)) set.seed(seed)
-				require("BayesPrism")
-				cat(n," ")
-				sample.Z.theta_n (X_n = X[n,], phi = phi, alpha = alpha, gibbs.idx = gibbs.idx, compute.elbo = compute.elbo)
-			}
-			gibbs.list <- lapply( 1:nrow(X), cpu.fun)
+			#cpu.fun <- function(n) {
+			#	if(!is.null(seed)) set.seed(seed)
+			#	require("BayesPrism")
+			#	cat(n," ")
+			#	sample.Z.theta_n (X_n = X[n,], phi = phi, alpha = alpha, gibbs.idx = gibbs.idx, compute.elbo = compute.elbo)
+			#}
+			gibbs.list <- lapply( 1:nrow(X), cpu.fun.3)
 			cat("\n")
 			jointPost <- newJointPost( bulkID = rownames(X),
 							   	   geneID = colnames(X), 
@@ -307,13 +336,13 @@ run.gibbs.refPhi <- function(gibbsSampler.obj,
 			return(jointPost)
 		}
 		else{
-			cpu.fun <- function(n) {
-				if(!is.null(seed)) set.seed(seed)
-				require("BayesPrism")
-				cat(n," ")
-				sample.theta_n (X_n = X[n,], phi = phi, alpha = alpha, gibbs.idx = gibbs.idx)
-			}
-			gibbs.list <- lapply( 1:nrow(X), cpu.fun)
+			#cpu.fun <- function(n) {
+			#	if(!is.null(seed)) set.seed(seed)
+			#	require("BayesPrism")
+			#	cat(n," ")
+			#	sample.theta_n (X_n = X[n,], phi = phi, alpha = alpha, gibbs.idx = gibbs.idx)
+			#}
+			gibbs.list <- lapply( 1:nrow(X), cpu.fun.4)
 			cat("\n")
 			thetaPost <- newThetaPost (bulkID = rownames(X),
 						 			   cellType = rownames(phi),
@@ -323,6 +352,16 @@ run.gibbs.refPhi <- function(gibbsSampler.obj,
 		}
 	}
 }
+
+#' cpu.fun.5
+cpu.fun.5 <- function(n) {
+		if(!is.null(seed)) set.seed(seed)
+		require("BayesPrism")
+		sample.theta_n (X_n = X[n,], 
+						phi = rbind(psi_mal[n,], psi_env), 
+						alpha = alpha,
+						gibbs.idx = gibbs.idx)				    				
+	}
 
 
 #' function to run Gibbs sampling if reference is of the class refPhi
@@ -345,20 +384,20 @@ run.gibbs.refTumor <- function(gibbsSampler.obj){
 	
 	cat("Start run... \n")
 
-	cpu.fun <- function(n) {
-		if(!is.null(seed)) set.seed(seed)
-		require("BayesPrism")
-		sample.theta_n (X_n = X[n,], 
-						phi = rbind(psi_mal[n,], psi_env), 
-						alpha = alpha,
-						gibbs.idx = gibbs.idx)				    				
-	}
+	#cpu.fun <- function(n) {
+	#	if(!is.null(seed)) set.seed(seed)
+	#	require("BayesPrism")
+	#	sample.theta_n (X_n = X[n,], 
+	#					phi = rbind(psi_mal[n,], psi_env), 
+	#					alpha = alpha,
+	#					gibbs.idx = gibbs.idx)				    				
+	#}
 	
 	sfInit(parallel = TRUE, cpus = gibbs.control$n.cores, type = "SOCK" )
 	sfExport("psi_mal", "psi_env", "X", "alpha", "gibbs.idx", "seed")
 
-	environment(cpu.fun) <- globalenv()
-	gibbs.list <- sfLapply( 1:nrow(X), cpu.fun)
+	#environment(cpu.fun) <- globalenv()
+	gibbs.list <- sfLapply( 1:nrow(X), cpu.fun.5)
 	sfStop()
 
 	thetaPost <- newThetaPost (bulkID = rownames(X),
