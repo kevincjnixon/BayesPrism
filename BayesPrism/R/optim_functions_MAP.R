@@ -79,7 +79,9 @@ optimize.psi<-function(phi,
 	environment(log.posterior.gamma.grad)<-globalenv()
 	environment(log.posterior.gamma)<-globalenv()
 	environment(logsumexp)<-globalenv()
-	sfExport("phi", "Z_gt", "Z_t", "prior.num", "opt.control", "Rcgminu", "log.posterior.gamma.grad","log.posterior.gamma","logsumexp")
+	environment(transform.phi_t)<-globalenv()
+	environment(transform.phi)<-globalenv()
+	sfExport("phi", "Z_gt", "Z_t", "prior.num", "opt.control", "Rcgminu", "log.posterior.gamma.grad","log.posterior.gamma","logsumexp", "transform.phi_t","transform.phi")
 
 	#environment(cpu.fun) <- globalenv()
 	opt.res <- sfLapply( 1:nrow(phi), cpu.fun)
